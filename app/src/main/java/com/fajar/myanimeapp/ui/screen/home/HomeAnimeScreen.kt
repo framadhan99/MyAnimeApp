@@ -77,7 +77,7 @@ fun HomeContent(
                     IconButton(onClick = onClick) {
                         Icon(
                             imageVector = Icons.Default.AccountCircle,
-                            contentDescription = null
+                            contentDescription = "about_page"
                         )
                     }
                 }
