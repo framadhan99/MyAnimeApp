@@ -17,25 +17,65 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.fajar.myanimeapp.model.AnimeDataSource
 import com.fajar.myanimeapp.ui.components.AnimeItem
+import com.fajar.myanimeapp.ui.navigation.Screen
+import com.fajar.myanimeapp.ui.screen.HomeScreen
 import com.fajar.myanimeapp.ui.theme.MyAnimeAppTheme
 
 @Composable
-fun MyAnimeApp() {
-    Scaffold (
-        topBar = { MyTopBar(onClick ={}) }
-    ) {paddingValues ->
-
-        Box(modifier = Modifier.padding(paddingValues)) {
-            LazyColumn(
-
+fun MyAnimeApp(
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController()
+) {
+    Scaffold(
+        topBar = { MyTopBar(onClick = {}) }
+    ) { paddingValues ->
+        NavHost(
+            navController = navController,
+            startDestination = Screen.Home.route,
+            modifier = Modifier.padding(paddingValues)
+        ){
+            composable(Screen.Home.route) {
+                HomeScreen(
+                    navigateToDetail = { animeId ->
+                        navController.navigate(Screen.Detail.createRoute(animeId))
+                    }
+                )
+            }
+            composable(
+                route = Screen.Detail.route,
+                arguments = listOf(navArgument("animeId") { type = NavType.LongType }),
             ) {
-                items(AnimeDataSource.ListAnime, key = { it.id }) { anime ->
-                    AnimeItem(image = anime.image, title = anime.title, score = anime.score)
-                }
+                val id = it.arguments?.getLong("animeId") ?: -1L
+                DetailScreen(
+                    rewardId = id,
+                    navigateBack = {
+                        navController.navigateUp()
+                    },
+                    navigateToCart = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Cart.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                )
             }
         }
+
+
     }
 }
 
@@ -57,9 +97,10 @@ fun MyTopBar(onClick: () -> Unit) {
         }
     )
 }
+
 @Composable
-@Preview (showBackground = true)
-fun MyAnimePreview(){
+@Preview(showBackground = true)
+fun MyAnimePreview() {
     MyAnimeAppTheme {
         MyAnimeApp()
     }
