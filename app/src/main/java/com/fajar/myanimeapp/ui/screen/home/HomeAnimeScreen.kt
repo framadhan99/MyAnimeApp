@@ -8,7 +8,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -19,6 +26,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.ViewModelFactoryDsl
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.fajar.myanimeapp.ui.theme.MyAnimeAppTheme
 import com.fajar.myanimeapp.R
 import com.fajar.myanimeapp.di.Injection
@@ -27,6 +37,8 @@ import com.fajar.myanimeapp.model.AnimeDataSource
 import com.fajar.myanimeapp.ui.ViewModelFactory
 import com.fajar.myanimeapp.ui.common.UiState
 import com.fajar.myanimeapp.ui.components.AnimeItem
+import com.fajar.myanimeapp.ui.components.MyTopBar
+import com.fajar.myanimeapp.ui.navigation.Screen
 import com.fajar.myanimeapp.ui.screen.home.HomeViewModel
 
 @Composable
@@ -36,6 +48,7 @@ fun HomeAnimeScreen(
         factory = ViewModelFactory(Injection.providerRepository())
     ),
     navigateToDetail: (Long) -> Unit,
+    onClick: () -> Unit,
 
     ) {
     viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
@@ -49,6 +62,7 @@ fun HomeAnimeScreen(
                     anime = uiState.data,
                     modifier = modifier,
                     navigateToDetail = navigateToDetail,
+                    onClick = onClick
                 )
             }
             is UiState.Error -> {}
@@ -57,25 +71,46 @@ fun HomeAnimeScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeContent(
     anime: List<Anime>,
     modifier: Modifier = Modifier,
-    navigateToDetail: (Long) -> Unit
+    navigateToDetail: (Long) -> Unit,
+    onClick: () -> Unit,
+    navController: NavHostController = rememberNavController()
 ) {
-    LazyColumn(
-    modifier = modifier
-    ) {
-        items(anime) { data ->
-            AnimeItem(
-                image = data.image,
-                title = data.title,
-                score = data.score,
-                modifier = Modifier.clickable {
-                    navigateToDetail(data.id)
-
-                }.padding(bottom = 8.dp)
+    Scaffold (
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = "My Anime App")
+                },
+                actions = {
+                    IconButton(onClick = onClick) {
+                        Icon(
+                            imageVector = Icons.Default.AccountCircle,
+                            contentDescription = null
+                        )
+                    }
+                }
             )
+        }
+    ){paddingValue->
+        LazyColumn(
+            modifier = modifier.padding(paddingValue)
+        ) {
+            items(anime) { data ->
+                AnimeItem(
+                    image = data.image,
+                    title = data.title,
+                    score = data.score,
+                    modifier = Modifier.clickable {
+                        navigateToDetail(data.id)
+
+                    }.padding(bottom = 8.dp)
+                )
+            }
         }
     }
 }

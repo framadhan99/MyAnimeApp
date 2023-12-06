@@ -30,69 +30,45 @@ fun MyAnimeApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
-    Scaffold(
-        topBar = {
-            MyTopBar(onClick = {
-                navController.navigate(Screen.Profile.route)
-            })
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Home.route,
+        modifier = modifier
+    ) {
+        composable(Screen.Home.route) {
+            HomeAnimeScreen(
+                navigateToDetail = { animeId ->
+                    navController.navigate(Screen.Detail.createRoute(animeId))
+                },
+                onClick = {
+                    navController.navigate(Screen.Profile.route)
+                }
+
+            )
         }
-    ) { paddingValues ->
-        NavHost(
-            navController = navController,
-            startDestination = Screen.Home.route,
-            modifier = Modifier.padding(paddingValues)
+
+        composable(Screen.Profile.route) {
+            ProfileScreen(
+                onBackClick = { navController.navigateUp() }
+            )
+        }
+
+        composable(
+            route = Screen.Detail.route,
+            arguments = listOf(navArgument("animeId") { type = NavType.LongType }),
         ) {
-            composable(Screen.Home.route) {
-                HomeAnimeScreen(
-                    navigateToDetail = { animeId ->
-                        navController.navigate(Screen.Detail.createRoute(animeId))
-                    }
+            val id = it.arguments?.getLong("animeId") ?: -1L
+            DetailAnimeScreen(
+                animeId = id,
+                navigateBack = {
+                    navController.navigateUp()
+                },
+
                 )
-            }
-
-            composable(Screen.Profile.route) {
-                ProfileScreen (
-                    onBackClick = { navController.navigateUp() }
-                )
-            }
-
-            composable(
-                route = Screen.Detail.route,
-                arguments = listOf(navArgument("animeId") { type = NavType.LongType }),
-            ) {
-                val id = it.arguments?.getLong("animeId") ?: -1L
-                DetailAnimeScreen(
-                    animeId = id,
-                    navigateBack = {
-                        navController.navigateUp()
-                    },
-
-                    )
-            }
         }
-
-
     }
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MyTopBar(onClick: () -> Unit) {
-    TopAppBar(
-        title = {
-            Text(text = "My Anime App")
-        },
-        actions = {
-            IconButton(onClick = onClick) {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = null
-                )
-            }
-        }
-    )
-}
 
 @Composable
 @Preview(showBackground = true)
