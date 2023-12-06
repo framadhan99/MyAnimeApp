@@ -21,7 +21,9 @@ import androidx.navigation.navArgument
 import com.fajar.myanimeapp.ui.navigation.Screen
 import com.fajar.myanimeapp.ui.screen.detail.DetailAnimeScreen
 import com.fajar.myanimeapp.ui.screen.detail.HomeAnimeScreen
+import com.fajar.myanimeapp.ui.screen.profile.ProfileScreen
 import com.fajar.myanimeapp.ui.theme.MyAnimeAppTheme
+import com.fajar.myanimeapp.ui.screen.profile.ProfileScreen as ProfileScreen1
 
 @Composable
 fun MyAnimeApp(
@@ -29,13 +31,17 @@ fun MyAnimeApp(
     navController: NavHostController = rememberNavController()
 ) {
     Scaffold(
-        topBar = { MyTopBar(onClick = {}) }
+        topBar = {
+            MyTopBar(onClick = {
+                navController.navigate(Screen.Profile.route)
+            })
+        }
     ) { paddingValues ->
         NavHost(
             navController = navController,
             startDestination = Screen.Home.route,
             modifier = Modifier.padding(paddingValues)
-        ){
+        ) {
             composable(Screen.Home.route) {
                 HomeAnimeScreen(
                     navigateToDetail = { animeId ->
@@ -43,6 +49,13 @@ fun MyAnimeApp(
                     }
                 )
             }
+
+            composable(Screen.Profile.route) {
+                ProfileScreen (
+                    onBackClick = { navController.navigateUp() }
+                )
+            }
+
             composable(
                 route = Screen.Detail.route,
                 arguments = listOf(navArgument("animeId") { type = NavType.LongType }),
@@ -54,15 +67,13 @@ fun MyAnimeApp(
                         navController.navigateUp()
                     },
 
-                )
+                    )
             }
         }
 
 
     }
 }
-
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,7 +84,7 @@ fun MyTopBar(onClick: () -> Unit) {
             Text(text = "My Anime App")
         },
         actions = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = onClick) {
                 Icon(
                     imageVector = Icons.Default.AccountCircle,
                     contentDescription = null

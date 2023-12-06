@@ -3,12 +3,17 @@ package com.fajar.myanimeapp.ui.screen.detail
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -17,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -57,7 +63,8 @@ fun DetailAnimeScreen(
                     onBackClick = navigateBack,
                 )
             }
-            is UiState.Error->{}
+
+            is UiState.Error -> {}
         }
     }
 }
@@ -71,31 +78,42 @@ fun DetailContent(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column {
+    Column(
+        modifier = Modifier.verticalScroll(rememberScrollState())
+    ) {
+
         Box {
             Image(
                 painter = painterResource(image),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = modifier.height(400.dp)
+                modifier = modifier
+                    .height(400.dp)
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
+                   
             )
             Icon(
                 imageVector = Icons.Default.ArrowBack,
+                tint = Color.White,
                 contentDescription = null,
-                modifier = Modifier.padding(16.dp).clickable { onBackClick() }
+                modifier = Modifier
+                    .padding(16.dp)
+                    .clickable { onBackClick() }
             )
         }
-
-        Text(text = title)
+        Spacer(modifier=Modifier.size(16.dp))
+        Text(
+            text = title,
+            fontSize = 24.sp
+        )
+        Spacer(modifier=Modifier.size(16.dp))
         Text(
             text = "Score :" + score.toString(),
-            fontSize = 8.sp
+            fontSize = 16.sp
         )
         Text(
             text = synopsis,
-            fontSize = 8.sp
+            fontSize = 16.sp
         )
     }
 }
