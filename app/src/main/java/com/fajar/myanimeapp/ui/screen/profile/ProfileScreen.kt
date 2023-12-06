@@ -39,7 +39,7 @@ fun ProfileScreen(
     ) {
         Icon(
             imageVector = Icons.Default.ArrowBack,
-            contentDescription = null,
+            contentDescription = "about_page",
             modifier = Modifier
                 .padding(16.dp)
                 .clickable { onBackClick() }

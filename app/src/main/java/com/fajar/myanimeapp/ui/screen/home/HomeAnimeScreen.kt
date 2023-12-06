@@ -1,13 +1,12 @@
 package com.fajar.myanimeapp.ui.screen.detail
 
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,26 +18,15 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.ViewModelFactoryDsl
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.fajar.myanimeapp.ui.theme.MyAnimeAppTheme
-import com.fajar.myanimeapp.R
 import com.fajar.myanimeapp.di.Injection
 import com.fajar.myanimeapp.model.Anime
-import com.fajar.myanimeapp.model.AnimeDataSource
 import com.fajar.myanimeapp.ui.ViewModelFactory
 import com.fajar.myanimeapp.ui.common.UiState
 import com.fajar.myanimeapp.ui.components.AnimeItem
-import com.fajar.myanimeapp.ui.components.MyTopBar
-import com.fajar.myanimeapp.ui.navigation.Screen
 import com.fajar.myanimeapp.ui.screen.home.HomeViewModel
 
 @Composable
@@ -78,7 +66,6 @@ fun HomeContent(
     modifier: Modifier = Modifier,
     navigateToDetail: (Long) -> Unit,
     onClick: () -> Unit,
-    navController: NavHostController = rememberNavController()
 ) {
     Scaffold (
         topBar = {
@@ -97,8 +84,12 @@ fun HomeContent(
             )
         }
     ){paddingValue->
-        LazyColumn(
-            modifier = modifier.padding(paddingValue)
+        LazyVerticalGrid(
+            modifier = modifier.padding(paddingValue),
+            columns = GridCells.Adaptive(160.dp),
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             items(anime) { data ->
                 AnimeItem(

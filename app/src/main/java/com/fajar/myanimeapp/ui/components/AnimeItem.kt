@@ -31,8 +31,7 @@ fun AnimeItem(
     score: Double,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    Column(
         modifier = modifier
     ) {
         Image(
@@ -41,21 +40,17 @@ fun AnimeItem(
             contentScale = ContentScale.Crop,
             modifier = Modifier.size(80.dp)
         )
-        Column (
-            modifier = Modifier.padding(start = 8.dp, end = 16.dp)
-        ){
-            Text(
-                text = title,
-            )
-            Text(
-                text = "score :" + score.toString(),
+        Text(
+            text = title,
+        )
+        Text(
+            text = "score :" + score.toString(),
 
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Light,
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.Light,
 
                 )
-            )
-        }
+        )
     }
 }
 
