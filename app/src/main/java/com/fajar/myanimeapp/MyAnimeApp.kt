@@ -23,7 +23,6 @@ import com.fajar.myanimeapp.ui.screen.detail.DetailAnimeScreen
 import com.fajar.myanimeapp.ui.screen.detail.HomeAnimeScreen
 import com.fajar.myanimeapp.ui.screen.profile.ProfileScreen
 import com.fajar.myanimeapp.ui.theme.MyAnimeAppTheme
-import com.fajar.myanimeapp.ui.screen.profile.ProfileScreen as ProfileScreen1
 
 @Composable
 fun MyAnimeApp(
@@ -63,8 +62,7 @@ fun MyAnimeApp(
                 navigateBack = {
                     navController.navigateUp()
                 },
-
-                )
+            )
         }
     }
 }
