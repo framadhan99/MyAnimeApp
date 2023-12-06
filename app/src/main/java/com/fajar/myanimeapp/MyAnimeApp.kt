@@ -1,10 +1,6 @@
 package com.fajar.myanimeapp
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,19 +12,15 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.fajar.myanimeapp.model.AnimeDataSource
-import com.fajar.myanimeapp.ui.components.AnimeItem
 import com.fajar.myanimeapp.ui.navigation.Screen
-import com.fajar.myanimeapp.ui.screen.HomeScreen
+import com.fajar.myanimeapp.ui.screen.detail.DetailAnimeScreen
+import com.fajar.myanimeapp.ui.screen.detail.HomeAnimeScreen
 import com.fajar.myanimeapp.ui.theme.MyAnimeAppTheme
 
 @Composable
@@ -45,7 +37,7 @@ fun MyAnimeApp(
             modifier = Modifier.padding(paddingValues)
         ){
             composable(Screen.Home.route) {
-                HomeScreen(
+                HomeAnimeScreen(
                     navigateToDetail = { animeId ->
                         navController.navigate(Screen.Detail.createRoute(animeId))
                     }
@@ -56,21 +48,12 @@ fun MyAnimeApp(
                 arguments = listOf(navArgument("animeId") { type = NavType.LongType }),
             ) {
                 val id = it.arguments?.getLong("animeId") ?: -1L
-                DetailScreen(
-                    rewardId = id,
+                DetailAnimeScreen(
+                    animeId = id,
                     navigateBack = {
                         navController.navigateUp()
                     },
-                    navigateToCart = {
-                        navController.popBackStack()
-                        navController.navigate(Screen.Cart.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    }
+
                 )
             }
         }
@@ -78,6 +61,8 @@ fun MyAnimeApp(
 
     }
 }
+
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -91,7 +76,7 @@ fun MyTopBar(onClick: () -> Unit) {
             IconButton(onClick = { /*TODO*/ }) {
                 Icon(
                     imageVector = Icons.Default.AccountCircle,
-                    contentDescription = "Mark as favorite"
+                    contentDescription = null
                 )
             }
         }

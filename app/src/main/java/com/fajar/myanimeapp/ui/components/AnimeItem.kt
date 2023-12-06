@@ -33,7 +33,7 @@ fun AnimeItem(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.clickable {}.padding(bottom = 8.dp)
+        modifier = modifier
     ) {
         Image(
             painter = painterResource(id = image),
