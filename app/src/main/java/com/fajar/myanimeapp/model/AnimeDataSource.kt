@@ -68,7 +68,7 @@ object AnimeDataSource {
         ),
         Anime(
             10,
-            R.drawable.spy,
+            R.drawable.conan,
             "Meitantei Conan",
             "Shinichi Kudou, a high school student of astounding talent in detective work, is well known for having solved several challenging cases. One day, when Shinichi spots two suspicious men and decides to follow them, he inadvertently becomes witness to a disturbing illegal activity. Unfortunately, he is caught in the act, so the men dose him with an experimental drug formulated by their criminal organization, leaving him to his death. However, to his own astonishment, Shinichi lives to see another day, but now in the body of a seven-year-old child.\n" +
                     "\n" +

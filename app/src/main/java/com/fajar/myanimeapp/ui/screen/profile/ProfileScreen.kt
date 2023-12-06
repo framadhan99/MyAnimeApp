@@ -52,7 +52,7 @@ fun ProfileScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
-                    painter = painterResource(R.drawable.onepiece),
+                    painter = painterResource(R.drawable.profile),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
